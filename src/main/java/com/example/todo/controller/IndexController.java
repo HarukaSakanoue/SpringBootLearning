@@ -11,10 +11,9 @@ public class IndexController{
     //http:localhost:8080/ -. "Hello,world!
     //Get /-> *Hello,Workd!
     //no usages new*
-    @GetMapping
-    @ResponseBody
+    @GetMapping("/")
     public String index(){
-        return "Hello,World!";
+        return "index";
     }
 
 }
