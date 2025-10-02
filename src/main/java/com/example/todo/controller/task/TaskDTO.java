@@ -1,5 +1,6 @@
 package com.example.todo.controller.task;
 
+import com.example.todo.service.task.TaskEntity;
 
 public record TaskDTO(
 
@@ -13,6 +14,16 @@ public record TaskDTO(
 
 
 ){
+
+    public static TaskDTO toDTO(TaskEntity entity) {
+        // TODO Auto-generated method stub
+        return new TaskDTO(
+            entity.id(),
+            entity.summary(),
+            entity.description(),
+            entity.status().name()
+        );
+    }
 
 
 
