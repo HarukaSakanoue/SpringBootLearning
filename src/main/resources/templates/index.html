@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja"
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
 >
 <head>
     <meta charset="UTF-8">
@@ -7,5 +7,6 @@
 </head>
 <body>
 <h1>Hello, world! from Thymeleaf</h1>
+<a th:href = "@{/tasks}">タスク一覧</a>
 </body>
 </html>
