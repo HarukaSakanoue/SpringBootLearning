@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.example.todo.repository.task.TaskRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,5 +22,10 @@ public class TaskService {
 
 
 
+    }
+
+
+    public Optional<TaskEntity> findById(long taskId) {
+        return taskRepository.selectById(taskId);
     }
 }
