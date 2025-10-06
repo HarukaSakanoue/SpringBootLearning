@@ -14,6 +14,10 @@
         <div>
             <a class="btn btn-secondary" th:href="@{/tasks}">一覧へ戻る</a>
             <a class="btn btn-primary" th:href="@{/tasks/{id}/editForm(id=${id})}">編集</a>
+            <form th:action="@{/tasks/{id}(id=${id})}" th:method="delete" style="display: inline;" onclick="return confirm('本当に削除しますか？');">
+                <button type="submit" class="btn btn-danger" >削除</button>
+
+            </form>
         </div>
 
         <div th:object="${task}" class="mt-3">
