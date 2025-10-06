@@ -1,6 +1,7 @@
 package com.example.todo.controller.task;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,5 +83,12 @@ public class TaskController {
         var entity = form.toEntity(id);
         taskService.update(entity);
         return "redirect:/tasks/{id}";
+    }
+
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable("id") long id) {
+        taskService.delete(id);
+        return "redirect:/tasks";
     }
 }

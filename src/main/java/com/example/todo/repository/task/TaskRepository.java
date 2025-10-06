@@ -27,4 +27,7 @@ public interface TaskRepository {
   @Update("UPDATE tasks SET summary = #{task.summary}, description = #{task.description}, status = #{task.status} WHERE id = #{task.id}")
   void update(@Param("task") TaskEntity entity);
 
+  @Update("DELETE FROM tasks WHERE id = #{taskId}")
+  void delete(@Param("taskId") long id);
+
 }
