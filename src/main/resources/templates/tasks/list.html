@@ -12,23 +12,55 @@
             <a th:href="@{/tasks/creationForm}" class="btn btn-primary mb-3">タスク作成</a>
         </div>
 
+
+        <div class="card">
+            <div class="card-header">
+                検索
+            </div>
+
+            <div class="card-body">
+                <form th:action="@{/tasks}" method="get" class="mb-3" th:object="${searchDTO}">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="summarySearch">概要</label>
+                        <input class="form-control" id="summarySearch" name="summary" type="text"
+                            placeholder="キーワード検索" th:field="*{summary}" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <div>
+                            <label class="form-label">ステータス</label>
+                        </div>
+                        <div class="btn-group">
+                            <input class="btn-check" type="checkbox" id="statusSearchTodo" name="status" value="TODO" th:checked="*{isChecked('TODO')}"/>
+                            <label class="btn btn-outline-primary" for="statusSearchTodo">Todo</label>
+                            <input class="btn-check" type="checkbox" id="statusSearchDoing" name="status" value="DOING" th:checked="*{isChecked('DOING')}"/>
+                            <label class="btn btn-outline-primary" for="statusSearchDoing">DOING</label>
+                            <input class="btn-check" type="checkbox" id="statusSearchDone" name="status" value="DONE" th:checked="*{isChecked('DONE')}"/>
+                            <label class="btn btn-outline-primary" for="statusSearchDone">Done</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">検索</button>
+                </form>
+            </div>
+        </div>
+
+
         <div>
-        <table class = "table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>概要</th>
-                    <th>ステータス</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="task : ${taskList}" th:object="${task}">
-                    <td><a th:href="@{/tasks/{id}(id=*{id})}" th:text="'#' + *{id}"></a></td>
-                    <td><a th:href="@{/tasks/{id}(id=*{id})}" th:text="'#' + *{summary}"></a></td>
-                    <td th:text="*{status}"></td>
-                </tr>
-            </tbody>
-        </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>概要</th>
+                        <th>ステータス</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="task : ${taskList}" th:object="${task}">
+                        <td><a th:href="@{/tasks/{id}(id=*{id})}" th:text="'#' + *{id}"></a></td>
+                        <td><a th:href="@{/tasks/{id}(id=*{id})}" th:text="'#' + *{summary}"></a></td>
+                        <td th:text="*{status}"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
     </section>

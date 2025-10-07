@@ -1,5 +1,7 @@
 package com.example.todo.controller.task;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.todo.service.task.TaskSearchEntity;
+import java.util.List;
+
 import com.example.todo.service.task.TaskService;
+import com.example.todo.service.task.TaskStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,13 +33,14 @@ public class TaskController {
     }
 
     @GetMapping
-    public String List(Model model) {
-        var taskList = taskService.find()
+    public String List(TaskSearchForm searchForm, Model model) {
+        var taskList = taskService.find(searchForm.toEntity())
                 .stream()
                 .map(entity -> TaskDTO.toDTO(entity))
                 .toList();
 
         model.addAttribute("taskList", taskList);
+        model.addAttribute("searchDTO", searchForm.toDTO());
         return "tasks/list";
     }
 
@@ -84,7 +91,6 @@ public class TaskController {
         taskService.update(entity);
         return "redirect:/tasks/{id}";
     }
-
 
     @DeleteMapping("{id}")
     public String delete(@PathVariable("id") long id) {

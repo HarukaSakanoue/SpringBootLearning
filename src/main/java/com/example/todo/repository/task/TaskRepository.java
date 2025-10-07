@@ -1,6 +1,7 @@
 package com.example.todo.repository.task;
 
 import com.example.todo.service.task.TaskEntity;
+import com.example.todo.service.task.TaskSearchEntity;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,8 +15,24 @@ import java.util.Optional;
 @Mapper
 public interface TaskRepository {
 
-  @Select("SELECT id, summary, description, status FROM tasks;")
-  List<TaskEntity> select();
+  @Select("""
+    <script>
+      SELECT id, summary, description, status
+      FROM tasks
+      <where>
+        <if test="condition.summary != null and condition.summary != ''">
+          AND summary LIKE CONCAT('%', #{condition.summary}, '%')
+        </if>
+        <if test="condition.status != null and condition.status.size() &gt; 0">
+          AND status IN
+          <foreach item="item" collection="condition.status" open="(" close=")" separator=",">
+            #{item}
+          </foreach>
+        </if>
+      </where>
+    </script>
+    """)
+  List<TaskEntity> select(@Param("condition") TaskSearchEntity condition);
 
 
   @Select("SELECT id, summary, description, status FROM tasks WHERE id = #{taskId};")
