@@ -1,6 +1,7 @@
 package com.example.todo.service.task;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +17,8 @@ public class TaskService {
     private final TaskRepository taskRepository;
 
 
-    public List<TaskEntity> find(){
-        
-
-        return taskRepository.select();
-
-
-
+    public List<TaskEntity> find(TaskSearchEntity searchEntity) {
+        return taskRepository.select(searchEntity);
     }
 
 
