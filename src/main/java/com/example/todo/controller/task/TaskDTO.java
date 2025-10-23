@@ -17,6 +17,7 @@ public record TaskDTO(
 
     public static TaskDTO toDTO(TaskEntity entity) {
         // TODO Auto-generated method stub
+
         return new TaskDTO(
             entity.id(),
             entity.summary(),

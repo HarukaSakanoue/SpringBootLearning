@@ -11,6 +11,16 @@ java {
     sourceCompatibility = '17'
 }
 
+// コンソール出力のエンコーディングをUTF-8に設定
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(Test) {
+    systemProperty 'file.encoding', 'UTF-8'
+    systemProperty 'sun.jnu.encoding', 'UTF-8'
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -26,20 +36,59 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
-	compileOnly 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.32'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
 	implementation group: 'org.webjars', name: 'bootstrap', version: '5.2.3'
 	implementation group: 'org.webjars', name: 'webjars-locator-core', version: '0.52'
 	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.2.1'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    
+    // テスト実行時の詳細をターミナルに出力
+    testLogging {
+        // テストイベントを表示（PASSEDも含む）
+        events "started", "passed", "skipped", "failed", "standardOut", "standardError"
+        
+        // 各テストの実行時間を表示
+        showStandardStreams = false  // trueにするとprintln()の出力も表示される
+        
+        // テストの詳細情報を表示
+        exceptionFormat = "full"  // 例外の詳細を表示
+        showExceptions = true     // 例外を表示
+        showCauses = true         // 原因を表示
+        showStackTraces = true    // スタックトレースを表示
+        
+        // テスト名の表示スタイル
+        displayGranularity = 2    // 0=none, 1=simple, 2=detailed
+    }
+    
+    // テスト開始時のメッセージ
+    doFirst {
+        println "\n=========================================="
+        println "テスト実行開始: ${project.name}"
+        println "==========================================\n"
+    }
+    
+    // テスト後に結果サマリーを表示
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\n=========================================="
+            println "テスト結果サマリー"
+            println "=========================================="
+            println "実行: ${result.testCount}件"
+            println "成功: ${result.successfulTestCount}件"
+            println "失敗: ${result.failedTestCount}件"
+            println "スキップ: ${result.skippedTestCount}件"
+            println "実行時間: ${result.endTime - result.startTime}ms"
+            println "==========================================\n"
+        }
+    }
 }
 
 tasks.named('bootRun') {
