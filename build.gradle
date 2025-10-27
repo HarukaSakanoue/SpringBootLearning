@@ -19,6 +19,11 @@ tasks.withType(JavaCompile) {
 tasks.withType(Test) {
     systemProperty 'file.encoding', 'UTF-8'
     systemProperty 'sun.jnu.encoding', 'UTF-8'
+    systemProperty 'stdout.encoding', 'UTF-8'
+    systemProperty 'stderr.encoding', 'UTF-8'
+    
+    // コンソール出力のエンコーディングを強制
+    jvmArgs '-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-Dstderr.encoding=UTF-8'
 }
 
 configurations {
