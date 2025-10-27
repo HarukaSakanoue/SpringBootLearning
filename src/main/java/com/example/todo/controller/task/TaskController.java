@@ -77,6 +77,7 @@ public class TaskController {
             BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("mode", "EDIT");
+            return "tasks/form";
         }
         var entity = form.toEntity(id);
         taskService.update(entity);
