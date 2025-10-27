@@ -17,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.example.todo.repository.task.TaskRepository;
 
-
 /*
  * TaskServiceの単体テスト
  */
@@ -83,27 +82,22 @@ public class TaskServiceTest {
         doNothing().when(taskRepository).delete(anyLong());
     }
 
-
-
-    @Test    
+    @Test
     @DisplayName("検索条件なし: すべてのタスクが取得できること")
     void testSearch() {
         // 検索条件なしでタスクを取得
         List<TaskEntity> actual = taskService.find(new TaskSearchEntity(null, null));
 
         List<TaskEntity> expectedTasks = Arrays.asList(
-            new TaskEntity(1L, "タスク1", "説明1", TaskStatus.TODO),
-            new TaskEntity(2L, "タスク2", "説明2", TaskStatus.DOING),
-            new TaskEntity(3L, "タスク3", "説明3", TaskStatus.DONE)
-        );
+                new TaskEntity(1L, "タスク1", "説明1", TaskStatus.TODO),
+                new TaskEntity(2L, "タスク2", "説明2", TaskStatus.DOING),
+                new TaskEntity(3L, "タスク3", "説明3", TaskStatus.DONE));
 
         // すべてのタスクが取得できることを確認
         assertEquals(expectedTasks, actual);
     }
 
-
-
-    @Test    
+    @Test
     @DisplayName("検索条件あり: 条件に合致するタスクのみ取得できること")
     void testSearchById() {
         // IDが2のタスクを取得
@@ -121,7 +115,7 @@ public class TaskServiceTest {
     void testCreateTask() {
         TaskEntity newTask = new TaskEntity(null, "新規タスク", "新規説明", TaskStatus.TODO);
         taskService.create(newTask);
-        
+
         // insertメソッドが正しく呼び出されたことを検証
         verify(taskRepository).insert(argThat(task -> {
             // IDはnullのまま（DBで自動生成されるため）
@@ -137,7 +131,7 @@ public class TaskServiceTest {
     @DisplayName("タスク更新: タスクが正常に更新できること")
     void testUpdateTask() {
         TaskEntity updatedTask = new TaskEntity(1L, "更新タスク", "更新説明", TaskStatus.DOING);
-        taskService.update(updatedTask);   
+        taskService.update(updatedTask);
 
         // updateメソッドが正しく呼び出されたことを検証
         verify(taskRepository).update(argThat(task -> {
@@ -156,8 +150,12 @@ public class TaskServiceTest {
         taskService.delete(deleteId);
 
         // deleteメソッドが正しく呼び出されたことを検証
+
+        // verify(taskRepository).delete(eq(3L)) で検証
+        // → 「本当にdelete(3L)が呼ばれたか？」をチェック
+        // → 呼ばれていれば成功 ✓
+        // → 呼ばれていなければ失敗 ✗
         verify(taskRepository).delete(eq(deleteId));
     }
-
 
 }
