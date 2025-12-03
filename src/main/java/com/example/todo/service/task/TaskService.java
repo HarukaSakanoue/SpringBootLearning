@@ -27,14 +27,20 @@ public class TaskService {
     }
 
     @Transactional
-    public void create(TaskEntity newEntity) {
+    public TaskEntity create(TaskEntity newEntity) {
+        // タスクを挿入
         taskRepository.insert(newEntity);
-
+        // 挿入直後のIDを取得(H2データベースの場合、MAX(id)を使用)
+        Long generatedId = taskRepository.selectMaxId();
+        // 生成されたIDでエンティティを再取得
+        return taskRepository.selectById(generatedId).orElse(newEntity);
     }
 
     @Transactional
-    public void update(TaskEntity entity) {
+    public TaskEntity update(TaskEntity entity) {
         taskRepository.update(entity);
+        // 更新後のエンティティを再取得
+        return taskRepository.selectById(entity.id()).orElse(entity);
     }
 
     @Transactional

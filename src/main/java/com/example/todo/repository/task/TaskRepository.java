@@ -38,8 +38,21 @@ public interface TaskRepository {
   @Select("SELECT id, summary, description, status FROM tasks WHERE id = #{taskId};")
   Optional<TaskEntity> selectById(@Param("taskId") long taskId);
 
+  /**
+   * タスクを挿入
+   * 
+   * 注意: recordは不変なので、自動生成されたIDは取得できません
+   * TaskService側で再取得する必要があります
+   */
   @Insert("INSERT INTO tasks (summary, description, status) VALUES (#{task.summary}, #{task.description}, #{task.status})")
   void insert(@Param("task") TaskEntity newEntity);
+  
+  /**
+   * 最後に挿入されたタスクのIDを取得(H2データベース用)
+   * H2 2.x系では関数が限定的なため、MAX(id)を使用
+   */
+  @Select("SELECT MAX(id) FROM tasks")
+  Long selectMaxId();
 
   @Update("UPDATE tasks SET summary = #{task.summary}, description = #{task.description}, status = #{task.status} WHERE id = #{task.id}")
   void update(@Param("task") TaskEntity entity);
